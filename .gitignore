@@ -9,3 +9,7 @@
 /HistogramGen.UT/obj
 /Histogram.ConsoleApp
 /.vs
+/HistogramGen/bin/Release/net8.0
+/HistogramGen.Benchmark/bin
+/HistogramGen.Benchmark/obj
+/HistogramGen.UT/bin/Release/net8.0
