@@ -14,6 +14,8 @@ public class HistogramBuilder<TKey, TData>
 
     public Func<TData, TKey> StartKey { get; set; }
     public Func<TData, TKey> EndKey { get; set; }
+    public Func<TKey, TKey>? RoundToThreshold { get; set; } = null;
+    public Func<TKey, TKey>? NextToThreshold { get; set; } = null;
 
     #endregion
 
@@ -27,7 +29,20 @@ public class HistogramBuilder<TKey, TData>
         EndKey = endKey;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="startKey"></param>
+    /// <param name="endKey"></param>
+    public HistogramBuilder(Func<TData, TKey> startKey, Func<TData, TKey> endKey, Func<TKey, TKey> roundToThreshold, Func<TKey, TKey> nextToThreshold) {
+        StartKey = startKey;
+        EndKey = endKey;
+        RoundToThreshold = roundToThreshold;
+        NextToThreshold = nextToThreshold;
+    }
+
     #region Methods
+
     /// <summary>
     /// 
     /// </summary>
@@ -51,6 +66,14 @@ public class HistogramBuilder<TKey, TData>
         foreach (var item in collection) {
             TKey start = StartKey(item);
             TKey end = EndKey(item);
+            if (RoundToThreshold is not null && NextToThreshold is not null) {
+                start = RoundToThreshold(start);
+                end = RoundToThreshold(end);
+                if (start.Equals(end)) {
+                    end = NextToThreshold!(end);
+                }
+            }
+
             AddPoint(pointOfInterests, item, start, true);
             AddPoint(pointOfInterests, item, end, false);
         }
@@ -105,5 +128,6 @@ public class HistogramBuilder<TKey, TData>
             pointOfInterest.End.Add(item);
         }
     }
+
     #endregion
 }
