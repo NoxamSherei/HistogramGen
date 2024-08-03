@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/HistogramGen.UT/bin/Debug/net8.0
+/HistogramGen/.vs
+/HistogramGen/bin/Debug/net8.0
+/HistogramGen/obj
+/HistogramGen.UT/obj
+/Histogram.ConsoleApp
+/.vs
