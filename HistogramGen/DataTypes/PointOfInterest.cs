@@ -1,7 +1,7 @@
 ﻿namespace HistogramGen.DataTypes;
 
-internal class PointOfInterest<TData>
+internal class PointOfInterest<TData> where TData : notnull
 {
-    public List<TData> Start { get; set; } = new();
-    public List<TData> End { get; set; } = new();
+    public List<TData> StartedElement { get; set; } = new();
+    public List<TData> EndedElement { get; set; } = new();
 }

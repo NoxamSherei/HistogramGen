@@ -2,7 +2,7 @@ using HistogramGen;
 
 namespace HistogramGen.UT;
 [TestClass]
-public class HistogramGenerator {
+public class HistogramGeneratorTest {
     [TestMethod]
     public void HistogramForNumericValues() {
         List<TestClassObj> list = new() {
