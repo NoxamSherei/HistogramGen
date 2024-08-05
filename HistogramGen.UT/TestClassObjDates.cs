@@ -6,3 +6,9 @@ internal class TestClassObjDates {
     public string Name { get; set; } = string.Empty;
     public int Size { get; set; } = 0;
 }
+
+internal class TestClassObjDate {
+    public DateTime Start { get; set; } = DateTime.MinValue;
+    public string Name { get; set; } = string.Empty;
+    public int Size { get; set; } = 0;
+}

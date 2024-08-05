@@ -7,7 +7,7 @@ using HistogramGen;
 public class HistogramBenchmark {
 
     internal record TestRecordObj(int Start, int End, string Name);
-    private HistogramBuilder<int, TestRecordObj> _histogramBuilder = new(x => x.Start, x => x.End);
+    private HistogramProcessor<int, TestRecordObj> _histogramBuilder = new(x => x.Start, x => x.End);
     private List<TestRecordObj> _data;
 
     [Params(10, 1_000, 10_000)]

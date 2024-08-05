@@ -2,6 +2,10 @@
 
 namespace HistogramGen.DataTypes;
 
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
 public class HistogramBinRange<TKey> :
     IComparable,
     IComparable<HistogramBinRange<TKey>>

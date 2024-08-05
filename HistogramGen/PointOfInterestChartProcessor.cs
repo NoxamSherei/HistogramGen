@@ -7,11 +7,9 @@ namespace HistogramGen;
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TData"></typeparam>
-public class HistogramBuilder<TKey, TData>
+public class PointOfInterestChartProcessor<TKey, TData> : IPointOfInterestChartProcessor<TKey, TData>
     where TKey : notnull, IComparable, IComparable<TKey>
     where TData : notnull {
-
-    #region Properties
 
     public Func<TData, TKey> GetStartKey { get; set; }
     public Func<TData, TKey> GetEndKey { get; set; }
@@ -19,49 +17,19 @@ public class HistogramBuilder<TKey, TData>
     public Func<TKey, TKey>? RoundToThreshold { get; set; } = null;
     public Func<TKey, TKey>? NextToThreshold { get; set; } = null;
 
-    #endregion
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="getStartKey"></param>
-    /// <param name="getEndKey"></param>
-    public HistogramBuilder(Func<TData, TKey> getStartKey, Func<TData, TKey> getEndKey) {
-        GetStartKey = getStartKey;
-        GetEndKey = getEndKey;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="getStartKey"></param>
-    /// <param name="getEndKey"></param>
-    public HistogramBuilder(Func<TData, TKey> getStartKey, Func<TData, TKey> getEndKey, Func<TKey, TKey> roundToThreshold, Func<TKey, TKey> nextToThreshold) {
+    public PointOfInterestChartProcessor(Func<TData, TKey> getStartKey, Func<TData, TKey> getEndKey, Func<TKey, TKey>? roundToThreshold, Func<TKey, TKey>? nextToThreshold) {
         GetStartKey = getStartKey;
         GetEndKey = getEndKey;
         RoundToThreshold = roundToThreshold;
         NextToThreshold = nextToThreshold;
     }
 
-    #region Methods
-
     /// <summary>
     /// 
     /// </summary>
     /// <param name="collection"></param>
     /// <returns></returns>
-    public Histogram<TKey, TData> BuildHistogram(ICollection<TData> collection) {
-        var listOfPointOfInterest = CollectPointOfInterest(collection);
-        Histogram<TKey, TData> result = ConvertToHistogram(listOfPointOfInterest);
-        return result;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="collection"></param>
-    /// <returns></returns>
-    private LinkedList<KeyValuePair<TKey, PointOfInterest<TData>>> CollectPointOfInterest(ICollection<TData> collection) {
+    public LinkedList<KeyValuePair<TKey, PointOfInterest<TData>>> CollectPointOfInterest(ICollection<TData> collection) {
         LinkedList<KeyValuePair<TKey, PointOfInterest<TData>>> linkedList;
         SortedDictionary<TKey, PointOfInterest<TData>> pointOfInterests = new();
         foreach (var item in collection) {
@@ -80,23 +48,6 @@ public class HistogramBuilder<TKey, TData>
         }
         linkedList = new(pointOfInterests);
         return linkedList;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="result"></param>
-    /// <param name="linkedList"></param>
-    private Histogram<TKey, TData> ConvertToHistogram(LinkedList<KeyValuePair<TKey, PointOfInterest<TData>>> linkedList) {
-        List<TData> currentElements = new();
-        Histogram<TKey, TData> result = new();
-        for (var it = linkedList.First; it?.Next != null; it = it.Next) {
-            currentElements.AddRange(it.Value.Value.StartedElement);
-            HistogramBinRange<TKey> range = new(it.Value.Key, it.Next.Value.Key );
-            result.histogram.Add(range, currentElements.ToList());
-            currentElements = currentElements.Except(it.Next.Value.Value.EndedElement).ToList();
-        }
-        return result;
     }
 
     /// <summary>
@@ -125,12 +76,11 @@ public class HistogramBuilder<TKey, TData>
     /// <param name="pointOfInterest"></param>
     private void AddPointToPoints(TData item, bool isStart, PointOfInterest<TData> pointOfInterest) {
         if (isStart) {
-            pointOfInterest.StartedElement.Add(item);
+            pointOfInterest.AppearedElements.Add(item);
         }
         else {
-            pointOfInterest.EndedElement.Add(item);
+            pointOfInterest.DisappearedElements.Add(item);
         }
     }
 
-    #endregion
 }

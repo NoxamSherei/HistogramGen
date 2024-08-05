@@ -19,7 +19,7 @@ public class HistogramGeneratorTest {
         var startKey = (TestClassObj x) => x.Start;
         var endKey = (TestClassObj x) => x.End;
         //TestExecution
-        HistogramBuilder<int, TestClassObj> builder = new(startKey, endKey);
+        HistogramProcessor<int, TestClassObj> builder = new(startKey, endKey);
         var histogram = builder.BuildHistogram(list);
 
         //Verify
@@ -30,7 +30,34 @@ public class HistogramGeneratorTest {
     }
 
     [TestMethod]
-    public void HistogramForDateTime() {
+    public void FillHistogramWithSingleDateTimeBaseElements() {
+        DateTime dateTime = DateTime.Today;
+        List<TestClassObjDate> list = new() {
+            new TestClassObjDate { Start = dateTime.AddHours(1), Name="name", Size=1},
+            new TestClassObjDate { Start = dateTime.AddHours(4), Name="name", Size=1},
+            new TestClassObjDate { Start = dateTime.AddHours(2), Name="name", Size=2},
+            new TestClassObjDate { Start = dateTime.AddHours(1), Name="name", Size=4},
+            new TestClassObjDate { Start = dateTime.AddHours(5), Name="name", Size=1},
+            new TestClassObjDate { Start = dateTime.AddHours(6), Name="name", Size=5},
+            new TestClassObjDate { Start = dateTime.AddHours(2), Name="name", Size=2},
+            new TestClassObjDate { Start = dateTime.AddHours(4), Name="name", Size=1},
+            new TestClassObjDate { Start = dateTime.AddHours(14), Name="name", Size=1},
+        };
+        var startKey = (TestClassObjDate x) => x.Start;
+
+        //TestExecution
+        HistogramProcessor<DateTime, TestClassObjDate> builder = new(startKey);
+        var histogram = builder.BuildHistogram(list);
+
+        //Verify
+        Assert.IsNotNull(histogram);
+        Assert.AreEqual(histogram.GlobalStart, dateTime.AddHours(1));
+        Assert.AreEqual(histogram.GlobalEnd, dateTime.AddHours(16));
+        Console.WriteLine(histogram.ToString(x => $"|{x.Name}|"));
+    }
+
+    [TestMethod]
+    public void FillHistogramWithDateTimeRangeBaseElements() {
         DateTime dateTime = DateTime.Today;
         List<TestClassObjDates> list = new() {
             new TestClassObjDates { Start = dateTime.AddHours(1), End = dateTime.AddHours(10)  , Name="name", Size=1},
@@ -47,7 +74,7 @@ public class HistogramGeneratorTest {
         var endKey = (TestClassObjDates x) => x.End;
 
         //TestExecution
-        HistogramBuilder<DateTime, TestClassObjDates> builder = new(startKey, endKey);
+        HistogramProcessor<DateTime, TestClassObjDates> builder = new(startKey, endKey);
         var histogram = builder.BuildHistogram(list);
 
         //Verify
