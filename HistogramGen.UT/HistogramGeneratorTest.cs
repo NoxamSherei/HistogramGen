@@ -19,7 +19,7 @@ public class HistogramGeneratorTest {
         var startKey = (TestClassObj x) => x.Start;
         var endKey = (TestClassObj x) => x.End;
         //TestExecution
-        HistogramProcessor<int, TestClassObj> builder = new(startKey, endKey);
+        HistogramProcessor<int, TestClassObj> builder = new HistogramProcessorBuilder<int, TestClassObj>().SetGetRangeKeyFunc(startKey, endKey).Build();
         var histogram = builder.BuildHistogram(list);
 
         //Verify
@@ -46,8 +46,8 @@ public class HistogramGeneratorTest {
         var startKey = (TestClassObjDate x) => x.Start;
 
         //TestExecution
-        HistogramProcessor<DateTime, TestClassObjDate> builder = new(startKey);
-        var histogram = builder.BuildHistogram(list);
+        HistogramProcessor<DateTime, TestClassObjDate> histogramProcessor = new HistogramProcessorBuilder<DateTime, TestClassObjDate>().SetGetKeyFunc(startKey).Build();
+        var histogram = histogramProcessor.BuildHistogram(list);
 
         //Verify
         Assert.IsNotNull(histogram);
@@ -74,7 +74,7 @@ public class HistogramGeneratorTest {
         var endKey = (TestClassObjDates x) => x.End;
 
         //TestExecution
-        HistogramProcessor<DateTime, TestClassObjDates> builder = new(startKey, endKey);
+        HistogramProcessor<DateTime, TestClassObjDates> builder = new HistogramProcessorBuilder<DateTime, TestClassObjDates>().SetGetRangeKeyFunc(startKey,endKey).Build();
         var histogram = builder.BuildHistogram(list);
 
         //Verify

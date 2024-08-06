@@ -13,36 +13,14 @@ public class HistogramProcessor<TKey, TData>
 
     public IPointOfInterestChartProcessor<TKey, TData> Processor { get; init; }
     public IPointOfInterestChartConverter<TKey, TData> Converter { get; init; }
-
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="getStartKey"></param>
-    /// <param name="getEndKey"></param>
-    public HistogramProcessor(Func<TData, TKey> getStartKey, Func<TData, TKey> getEndKey) {
-        Processor = new PointOfInterestChartProcessor<TKey, TData>(getStartKey, getEndKey, null, null);
-        Converter = new PointOfInterestChartConverter<TKey, TData>();
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="getStartKey"></param>
-    /// <param name="getEndKey"></param>
-    public HistogramProcessor(Func<TData, TKey> getStartKey) {
-        Processor = new PointOfInterestChartProcessor<TKey, TData>(getStartKey, null, null, null);
-        Converter = new PointOfInterestChartConverter<TKey, TData>();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="getStartKey"></param>
-    /// <param name="getEndKey"></param>
-    /// <param name="roundToThreshold"></param>
-    /// <param name="nextToThreshold"></param>
-    public HistogramProcessor(Func<TData, TKey> getStartKey, Func<TData, TKey> getEndKey, Func<TKey, TKey> roundToThreshold, Func<TKey, TKey> nextToThreshold) {
-        Processor = new PointOfInterestChartProcessor<TKey, TData>(getStartKey, getEndKey, roundToThreshold, nextToThreshold);
-        Converter = new PointOfInterestChartConverter<TKey, TData>();
+    /// <param name="processor"></param>
+    /// <param name="converter"></param>
+    public HistogramProcessor(IPointOfInterestChartProcessor<TKey, TData> processor, IPointOfInterestChartConverter<TKey, TData> converter) {
+        Processor = processor;
+        Converter = converter;
     }
 
     /// <summary>

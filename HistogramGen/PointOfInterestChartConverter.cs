@@ -27,3 +27,28 @@ public class PointOfInterestChartConverter<TKey, TData> : IPointOfInterestChartC
         return result;
     }
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
+/// <typeparam name="TData"></typeparam>
+public class PointOfInterestChartConverterForSingleElement<TKey, TData> : IPointOfInterestChartConverter<TKey, TData>
+    where TKey : notnull, IComparable, IComparable<TKey>
+    where TData : notnull {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="linkedList"></param>
+    public Histogram<TKey, TData> ConvertToHistogram(LinkedList<KeyValuePair<TKey, PointOfInterest<TData>>> linkedList) {
+        
+        Histogram<TKey, TData> result = new();
+        for (var it = linkedList.First; it?.Next != null; it = it.Next) {
+            List<TData> currentElements = new(it.Value.Value.AppearedElements);
+            HistogramBinRange<TKey> range = new(it.Value.Key, it.Next.Value.Key);
+            result.histogramData.Add(range, currentElements.ToList());
+        }
+        return result;
+    }
+}
